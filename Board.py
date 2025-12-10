@@ -4,9 +4,9 @@ class board():
 
     def checkWin(self):
 
-        if self.hasWon(self, 'x'):
+        if self.hasWon('x'):
             return 'x'
-        if self.hasWon(self, 'o'):
+        if self.hasWon('o'):
             return 'o'
         return 'n'
 
@@ -56,6 +56,7 @@ class board():
             return -1
 
         self.board[row][col] = player
+        print(f"placed {player} in location [{col},{row}]")
         return player
 
     def checkEmpty(self, row, col):
@@ -81,13 +82,3 @@ class board():
             print("|" , self.board[i][0], "|" , self.board[i][1], "|" , self.board[i][2], "|")
             print("-" * 13)
 
-
-
-board = board()
-board.displayBoard()
-board.makeMove('x', 0, 0)
-board.displayBoard()
-board.makeMove('o', 0, 0)
-board.displayBoard()
-board.makeMove('o', 1, 1)
-board.displayBoard()
