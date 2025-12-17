@@ -67,7 +67,7 @@ class board():
     def checkValidMove(self, player, row, col):
         if player not in ['x', 'o']:
             return False
-        if row not in [0,1,2] or col not in [0,1,2]:
+        if row not in [0, 1, 2] or col not in [0, 1, 2]:
             return False
         if not self.checkEmpty(row, col):
             return False
@@ -79,6 +79,8 @@ class board():
     def displayBoard(self):
         print("-" * 13)
         for i in range(3):
-            print("|" , self.board[i][0], "|" , self.board[i][1], "|" , self.board[i][2], "|")
+            print("|", self.board[i][0], "|", self.board[i][1], "|", self.board[i][2], "|")
             print("-" * 13)
 
+    def draw(self, surface):
+        surface.blit(self.surface, self.rect)

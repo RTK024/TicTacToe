@@ -81,7 +81,7 @@ def needIBlock(board, me):
     """
     :param board: game board
     :param me: the type of player "x" or "o"
-    :return: if other player can win how to block if not return [-1,-1]
+    :return: if other player can win returns how to block if not return [-1,-1]
     """
     if me not in ["x", "o"]:
         print("Enter viable player")
@@ -106,3 +106,15 @@ def playRandom(board):
         return list(random.choice(list(viableMoves)))
     else:
         return [-1, -1]
+
+def play(boad, me):
+
+    move = canIWin(boad, me)
+    if move != [-1,-1]:
+        return move
+
+    move = needIBlock(boad, me)
+    if move != [-1,-1]:
+        return move
+
+    return playRandom(boad)
