@@ -3,7 +3,6 @@ class board():
         self.board = [["-", "-", "-"], ["-", "-", "-"], ["-", "-", "-"]]
 
     def checkWin(self):
-
         if self.hasWon('x'):
             return 'x'
         if self.hasWon('o'):
@@ -56,10 +55,13 @@ class board():
             return -1
 
         self.board[row][col] = player
-        print(f"placed {player} in location [{col},{row}]")
+        print(f"placed {player} in location [{row},{col}]")
         return player
 
     def checkEmpty(self, row, col):
+        if row not in [0,1,2] or col not in [0,1,2]:
+            return False
+
         if self.board[row][col] == "-":
             return True
         return False
@@ -82,5 +84,3 @@ class board():
             print("|", self.board[i][0], "|", self.board[i][1], "|", self.board[i][2], "|")
             print("-" * 13)
 
-    def draw(self, surface):
-        surface.blit(self.surface, self.rect)

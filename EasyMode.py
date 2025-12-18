@@ -99,7 +99,7 @@ def playRandom(board):
 
     for row in range(3):
         for col in range(3):
-            if board.board[row][col] == "-":
+            if board.checkEmpty(row, col):
                 viableMoves.add((row, col))
 
     if viableMoves:
