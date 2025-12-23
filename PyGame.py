@@ -1,14 +1,12 @@
-import pygame
 from pygame.locals import *
-from sys import exit
 import Board
 import EasyMode
-from Constants import *
 from UIFunctions import *
+import ScoreBoard
 
 # General settings
 pygame.init()
-FPS = 60
+FPS = 150
 FramePerSec = pygame.time.Clock()
 
 # Screen information
@@ -30,8 +28,22 @@ Useperator.fill(SEPERATOR)
 Dseperator = pygame.Surface((BOARD_SIZE-2*BEAUTY_TAX, DELIMITER))
 Dseperator.fill(SEPERATOR)
 
+# New game Button
+newGame = pygame.Surface((NEW_WIDTH, NEW_HEIGHT))
+newGame.fill(NEW_COLOR)
+font = pygame.font.SysFont("calibri", NEW_HEIGHT)
+newGameTxt = font.render('New Game', True, D_GREY)
+
+# Score Board
+score = ScoreBoard.scoreBoard()
+font = pygame.font.SysFont("calibri", FONTSIZE)
+playerTxt = font.render('Player', True, BLACK)
+computerTxt = font.render('Computer', True, BLACK)
+
+# Variables for the program
 mouseBox = [-1,-1]
 prevMouseBox = [-1,-1]
+gameDone = False
 
 # Running the game until interruption
 while True:
@@ -48,7 +60,7 @@ while True:
         prevMouseBox = mouseBox
         mouseBox = mouseToBox(pygame.mouse.get_pos())
 
-        if mouseBox != [-1,-1] and b.checkValidMove("x", mouseBox[0], mouseBox[1]):
+        if mouseBox != [-1,-1] and b.checkValidMove("x", mouseBox[0], mouseBox[1]) and not gameDone:
             shaded = pygame.Surface((SQUARE_SIZE, SQUARE_SIZE))
             shaded.fill(D_SHADE)
             board.blit(shaded, boxToLocationBoard(mouseBox[0], mouseBox[1]))
@@ -56,7 +68,7 @@ while True:
 
         # The game logic - Upon Click
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if mouseBox != [-1, -1] and b.checkValidMove("x", mouseBox[0], mouseBox[1]):
+            if mouseBox != [-1, -1] and b.checkValidMove("x", mouseBox[0], mouseBox[1]) and not gameDone:
                 b.makeMove("x", mouseBox[0], mouseBox[1])
 
                 # Un-hover the square after move
@@ -66,19 +78,22 @@ while True:
 
                 if b.hasWon("x"):
                     print("x won! congrats!")
-                    EndGame()
+                    gameDone = True
+                    score.increment("x")
                 if b.checkTie():
                     print("Tie! good game!")
-                    EndGame()
+                    gameDone = True
 
-                aiMove = EasyMode.play(b, "o")
-                b.makeMove("o", aiMove[0], aiMove[1])
-                if b.hasWon("o"):
-                    print("o won! congrats!")
-                    EndGame()
-                if b.checkTie():
-                    print("Tie! good game!")
-                    EndGame()
+                if not gameDone:
+                    aiMove = EasyMode.play(b, "o")
+                    b.makeMove("o", aiMove[0], aiMove[1])
+                    if b.hasWon("o"):
+                        print("o won! congrats!")
+                        gameDone = True
+                        score.increment("o")
+                    if b.checkTie():
+                        print("Tie! good game!")
+                        gameDone = True
 
     # Draw the board
     screen.blit(board, (SIDE_GAP, VERTICAL_GAP))
@@ -107,6 +122,27 @@ while True:
             toDraw = pygame.transform.smoothscale(toDraw, (SQUARE_SIZE, SQUARE_SIZE))
 
             board.blit(toDraw, boxToLocationBoard(row, col))
+
+    # Draw new-game Button
+    screen.blit(newGame, ( (SCREEN_WIDTH - NEW_WIDTH)/2, (SCREEN_HEIGHT + BOARD_SIZE- NEW_HEIGHT) / 2))
+    newGame.blit(newGameTxt, (5,2))
+
+    if event.type == pygame.MOUSEBUTTONDOWN and onNewGame(pygame.mouse.get_pos()):
+        b.emptyBoard()
+        board.fill(BOARD_COLOR)
+        for row in range(3):
+            for col in range(3):
+                pygame.Surface((BOARD_SIZE, BOARD_SIZE))
+        gameDone = False
+
+    # Draw Score Board
+    screen.blit(playerTxt, (PLAYER_WIDTH, PLAYER_HEIGHT))
+    playrScore = font.render(str(score.x_score), True, BLACK)
+    screen.blit(playrScore, (PLAYER_WIDTH + 15, PLAYER_HEIGHT + 15))
+
+    screen.blit(computerTxt, (COMPUTER_WIDTH, COMPUTER_HEIGHT))
+    computerScore = font.render(str(score.o_score), True, BLACK)
+    screen.blit(computerScore, (COMPUTER_WIDTH + 30, COMPUTER_HEIGHT + 15))
 
     # Update the game at each iteration
     pygame.display.update()

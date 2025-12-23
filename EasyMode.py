@@ -49,6 +49,7 @@ def canIWin(board, me):
     emptyLocation = -1
     for i in range(3):
         if board.board[i][i] == otherPlayer:
+            count = -1
             break
         if board.board[i][i] == me:
             count += 1
@@ -64,6 +65,7 @@ def canIWin(board, me):
     for i in range(3):
 
         if board.board[i][2-i] == otherPlayer:
+            count = -1
             break
         if board.board[i][2-i] == me:
             count += 1
