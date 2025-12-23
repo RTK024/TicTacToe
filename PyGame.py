@@ -138,11 +138,11 @@ while True:
     # Draw Score Board
     screen.blit(playerTxt, (PLAYER_WIDTH, PLAYER_HEIGHT))
     playrScore = font.render(str(score.x_score), True, BLACK)
-    screen.blit(playrScore, (PLAYER_WIDTH + 15, PLAYER_HEIGHT + 15))
+    screen.blit(playrScore, (PLAYER_WIDTH + 12, PLAYER_HEIGHT + 15))
 
     screen.blit(computerTxt, (COMPUTER_WIDTH, COMPUTER_HEIGHT))
     computerScore = font.render(str(score.o_score), True, BLACK)
-    screen.blit(computerScore, (COMPUTER_WIDTH + 30, COMPUTER_HEIGHT + 15))
+    screen.blit(computerScore, (COMPUTER_WIDTH + 25, COMPUTER_HEIGHT + 15))
 
     # Update the game at each iteration
     pygame.display.update()
